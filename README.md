@@ -1,4 +1,7 @@
 Calculator C Project with 11 basic functions
+This project is designed to practice the skills of using the C language.
+The C programming language is used, the MinGW-W64 compiler gcc 11.2.0.
+To run, clone the repository and import into Eclipse, or by the src path. Build and run the Calculator.c file
 Welcome to calculator!
 Here are the main operations supported by the calculator:
 1. '+'    	(Adds up the input numbers)
