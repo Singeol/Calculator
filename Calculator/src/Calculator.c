@@ -279,23 +279,60 @@ double doCbrt(double x)
 void en(void)
 	{
 	char mode;
+	int chk = 0;
+	while (chk != 1)
+	{
 	puts("Select the operating mode v - for working with vectors, n - for normal mode");
 	scanf(" %c", &mode);
 	switch (mode)
 		{
 		case 'v':
-			int size;
-			puts("Vector mode");
-			scanf("%i", &size);
-			doMultiplyVector(size);
+			{
+			char a;
+			int size, operation;
+			puts("Welcome to vector mode calculator!");
+			puts("Here are the main operations supported by the vector mode:");
+			puts("1. +		(Adds vectors)");
+			puts("2. -		(Subtracts the second vector from the first)");
+			puts("3. *		(Calculates the scalar product of vectors)");
+			puts("Enter the operation number from the list, then the coordinates of the vectors in order)");
+			while (a != 'n')
+				{
+				puts("Enter the operation number from the list");
+				scanf(" %i", &operation);
+				switch (operation)
+					{
+					case 1:
+						puts("Enter the length of the vector");
+						scanf("%i", &size);
+						doSumVector(size);
+						break;
+					case 2:
+						puts("Enter the length of the vector");
+						scanf("%i", &size);
+						doSubstractionVector(size);
+						break;
+					case 3:
+						puts("Enter the length of the vector");
+						scanf("%i", &size);
+						doMultiplyVector(size);
+						break;
+					default:
+						puts("There is no such operation, repeat the input");
+					}
+				puts("\nContinue working? y - yes, n - no");
+				scanf(" %c", &a);
+				}
+			chk = 1;
 			break;
+			}
 		case 'n':
 			{
 			char a;
 			int operation;
 			double x, y;
-			puts("Welcome to calculator!");
-			puts("Here are the main operations supported by the calculator:");
+			puts("Welcome to normal mode calculator!");
+			puts("Here are the main operations supported by the normal mode:");
 			puts("1. +		(Adds up the input numbers)");
 			puts("2. -		(Subtracts the second number from the first)");
 			puts("3. *		(Multiplies the first number by the second)");
@@ -385,9 +422,11 @@ void en(void)
 				puts("\nContinue working? y - yes, n - no");
 				scanf(" %c", &a);
 				}
-				break;
+			chk = 1;
+			break;
 			}
 		default: puts("There is no such mode");
+		}
 		}
 	}
 
@@ -397,20 +436,60 @@ void en(void)
 void ru(void)
 	{
 	char mode;
+	int chk = 0;
+	while (chk != 1)
+	{
 	puts("Выберите режим работы v - для работы с векторами, n - для обычного режима");
 	scanf(" %c", &mode);
 	switch (mode)
 		{
 		case 'v':
-			puts("Векторный режим");
+			{
+			char a;
+			int size, operation;
+			puts("Приветствую в векторном режиме калькулятора");
+			puts("Вот основные операции, поддерживаемые векторным режимом:");
+			puts("1. +		(Складывает векторы)");
+			puts("2. -		(Вычитает второй вектор из первого)");
+			puts("3. *		(Вычисляет скалярное произведение векторов)");
+			puts("Введите номер операции из списка, затем координаты векторов по порядку)");
+			while (a != 'n')
+				{
+				puts("Введите номер операции из списка");
+				scanf(" %i", &operation);
+				switch (operation)
+					{
+					case 1:
+						puts("Введите длину вектора");
+						scanf("%i", &size);
+						doSumVector(size);
+						break;
+					case 2:
+						puts("Введите длину вектора");
+						scanf("%i", &size);
+						doSubstractionVector(size);
+						break;
+					case 3:
+						puts("Введите длину вектора");
+						scanf("%i", &size);
+						doMultiplyVector(size);
+						break;
+					default:
+						puts("Такой операции нет, повторите ввод");
+					}
+				puts("\nПродолжить работу? y - да, n - нет");
+				scanf(" %c", &a);
+				}
+			chk = 1;
 			break;
+			}
 		case 'n':
 			{
 			char a;
 			int operation;
 			double x, y;
-			puts("Приветствую в калькуляторе!");
-			puts("Здесь перечислены операции, поддерживаемые калькулятором:");
+			puts("Приветствую в обычном режиме калькулятора!");
+			puts("Здесь перечислены операции, поддерживаемые обычным режимом:");
 			puts("1. +		(Складывает входные числа)");
 			puts("2. -		(Вычитает второе число из первого");
 			puts("3. *		(Умножает первое число на второе)");
@@ -500,9 +579,11 @@ void ru(void)
 				puts("\nПродолжить работу? y - да, n - нет");
 				scanf(" %c", &a);
 				}
-				break;
+			chk = 1;
+			break;
 			}
 		default: puts("Такого режима нет");
+		}
 		}
 	}
 
