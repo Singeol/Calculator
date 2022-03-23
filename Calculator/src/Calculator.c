@@ -156,199 +156,230 @@ double doCbrt(double x)
  * A function for implementing an interface with English*/
 void en(void)
 	{
-	char a;
-	int operation;
-	double x, y;
-	puts("Welcome to calculator!");
-	puts("Here are the main operations supported by the calculator:");
-	puts("1. +    	(Adds up the input numbers)");
-	puts("2. -    	(Subtracts the second number from the first)");
-	puts("3. *    	(Multiplies the first number by the second)");
-	puts("4. /    	(Divides the first number by the second)");
-	puts("5. !    	(Finds the factorial of a number)");
-	puts("6. pow    (Raises a number to the power of another number, works only with integers");
-	puts("7. ln		(Finds the natural logarithm of a number");
-	puts("8. sqrt	(Finds the square root of a number)");
-	puts("9. cbrt	(Finds the cubic root of a number)");
-	puts("10. abs	(Finds the number module");
-	puts("11. exp	(Finds the exponent in the power of a number)");
-	puts("Enter the operation number from the list, then two numbers in order");
-	while (a != 'n')
+	char mode;
+	puts("Select the operating mode v - for working with vectors, n - for normal mode");
+	scanf(" %c", &mode);
+	printf(" %c", mode);
+	switch (mode)
 		{
-		puts("Enter the operation number from the list");
-		scanf(" %i", &operation);
-		switch (operation)
+		case 'v':
+			puts("Vector mode");
+			break;
+		case 'n':
 			{
-			case 1:
-				puts("Enter the first number");
-				scanf("%lf", &x);
-				puts("Enter the second number");
-				scanf("%lf", &y);
-				printf("%lf + %lf = %lf", x, y, doSum(x, y));
+			char a;
+			int operation;
+			double x, y;
+			puts("Welcome to calculator!");
+			puts("Here are the main operations supported by the calculator:");
+			puts("1. +		(Adds up the input numbers)");
+			puts("2. -		(Subtracts the second number from the first)");
+			puts("3. *		(Multiplies the first number by the second)");
+			puts("4. /		(Divides the first number by the second)");
+			puts("5. !		(Finds the factorial of a number)");
+			puts("6. pow		(Raises a number to the power of another number, works only with integers");
+			puts("7. ln		(Finds the natural logarithm of a number");
+			puts("8. sqrt		(Finds the square root of a number)");
+			puts("9. cbrt		(Finds the cubic root of a number)");
+			puts("10. abs		(Finds the number module");
+			puts("11. exp		(Finds the exponent in the power of a number)");
+			puts("Enter the operation number from the list, then two numbers in order");
+			while (a != 'n')
+				{
+				puts("Enter the operation number from the list");
+				scanf(" %i", &operation);
+				switch (operation)
+					{
+					case 1:
+						puts("Enter the first number");
+						scanf("%lf", &x);
+						puts("Enter the second number");
+						scanf("%lf", &y);
+						printf("%lf + %lf = %lf", x, y, doSum(x, y));
+						break;
+					case 2:
+						puts("Enter the first number");
+						scanf("%lf", &x);
+						puts("Enter the second number");
+						scanf("%lf", &y);
+						printf("%lf - %lf = %lf", x, y, doSubstraction(x, y));
+						break;
+					case 3:
+						puts("Enter the first number");
+						scanf("%lf", &x);
+						puts("Enter the second number");
+						scanf("%lf", &y);
+						printf("%lf * %lf = %lf", x, y, doMultiply(x, y));
+						break;
+					case 4:
+						puts("Enter the first number");
+						scanf("%lf", &x);
+						puts("Enter the second number");
+						scanf("%lf", &y);
+						printf("%lf / %lf = %lf", x, y, doDivision(x, y));
+						break;
+					case 5:
+						puts("Enter a number");
+						scanf("%lf", &x);
+						printf("%lf! = %llu", x, doFactorial(x));
+						break;
+					case 6:
+						puts("Enter a number to exponentiate");
+						scanf("%lf", &x);
+						puts("Enter the degree to which you want to raise the number");
+						scanf("%lf", &y);
+						printf("%lf^%lf = %llu", x, y, doPow(x, y));
+						break;
+					case 7:
+						puts("Enter a number to find the natural logarithm");
+						scanf("%lf", &x);
+						printf("ln(%lf) = %.3lf", x, doLn(x));
+						break;
+					case 8:
+						puts("Enter a number to find the square root");
+						scanf("%lf", &x);
+						printf("sqrt(%lf) = %.3lf", x, doSqrt(x));
+						break;
+					case 9:
+						puts("Enter a number to find the cubic root");
+						scanf("%lf", &x);
+						printf("cbrt(%lf) = %.3lf", x, doCbrt(x));
+						break;
+					case 10:
+						puts("Enter a number to find the module");
+						scanf("%lf", &x);
+						printf("abs(%lf) = %lf", x, doAbs(x));
+						break;
+					case 11:
+						puts("Enter a number to find the exponent");
+						scanf("%lf", &x);
+						printf("exp(%lf) = %.3lf", x, doExp(x));
+						break;
+					default:
+						puts("There is no such operation, repeat the input");
+					}
+				puts("\nContinue working? y - yes, n - no");
+				scanf(" %c", &a);
+				}
 				break;
-			case 2:
-				puts("Enter the first number");
-				scanf("%lf", &x);
-				puts("Enter the second number");
-				scanf("%lf", &y);
-				printf("%lf - %lf = %lf", x, y, doSubstraction(x, y));
-				break;
-			case 3:
-				puts("Enter the first number");
-				scanf("%lf", &x);
-				puts("Enter the second number");
-				scanf("%lf", &y);
-				printf("%lf * %lf = %lf", x, y, doMultiply(x, y));
-				break;
-			case 4:
-				puts("Enter the first number");
-				scanf("%lf", &x);
-				puts("Enter the second number");
-				scanf("%lf", &y);
-				printf("%lf / %lf = %lf", x, y, doDivision(x, y));
-				break;
-			case 5:
-				puts("Enter a number");
-				scanf("%lf", &x);
-				printf("%lf! = %llu", x, doFactorial(x));
-				break;
-			case 6:
-				puts("Enter a number to exponentiate");
-				scanf("%lf", &x);
-				puts("Enter the degree to which you want to raise the number");
-				scanf("%lf", &y);
-				printf("%lf^%lf = %llu", x, y, doPow(x, y));
-				break;
-			case 7:
-				puts("Enter a number to find the natural logarithm");
-				scanf("%lf", &x);
-				printf("ln(%lf) = %.3lf", x, doLn(x));
-				break;
-			case 8:
-				puts("Enter a number to find the square root");
-				scanf("%lf", &x);
-				printf("sqrt(%lf) = %.3lf", x, doSqrt(x));
-				break;
-			case 9:
-				puts("Enter a number to find the cubic root");
-				scanf("%lf", &x);
-				printf("cbrt(%lf) = %.3lf", x, doCbrt(x));
-				break;
-			case 10:
-				puts("Enter a number to find the module");
-				scanf("%lf", &x);
-				printf("abs(%lf) = %lf", x, doAbs(x));
-				break;
-			case 11:
-				puts("Enter a number to find the exponent");
-				scanf("%lf", &x);
-				printf("exp(%lf) = %.3lf", x, doExp(x));
-				break;
-			default:
-				puts("There is no such operation, repeat the input");
 			}
-	puts("\nContinue working? y - yes, n - no");
-	scanf(" %c", &a);
+		default: puts("There is no such mode");
 		}
 	}
+
 
 /* Функция для реализации интерфейса с Русским языком
  * Function for implementing the interface with the Russian language*/
 void ru(void)
 	{
-	char a;
-	int operation;
-	double x, y;
-	puts("Приветствую в калькуляторе!");
-	puts("Здесь перечислены операции, поддерживаемые калькулятором:");
-	puts("1. +    	(Складывает входные числа)");
-	puts("2. -    	(Вычитает второе число из первого");
-	puts("3. *    	(Умножает первое число на второе)");
-	puts("4. /    	(Делит первое число на второе)");
-	puts("5. !    	(Находит факториал числа)");
-	puts("6. pow    (Возводит число в степень другого числа, работает только с целыми числами");
-	puts("7. ln		(Находит натуральный логарифм числа)");
-	puts("8. sqrt	(Находит квадратный корень числа)");
-	puts("9. cbrt	(Находит кубический корень числа)");
-	puts("10. abs	(Находит модуль числа");
-	puts("11. exp	(Находит экспоненту в степени числа)");
-	puts("Введите номер операции из списка, затем два числа по порядку");
-	while (a != 'n')
+	char mode;
+	puts("Выберите режим работы v - для работы с векторами, n - для обычного режима");
+	scanf(" %c", &mode);
+	printf(" %c", mode);
+	switch (mode)
 		{
-		puts("Введите номер операции из списка");
-		scanf(" %i", &operation);
-		switch (operation)
+		case 'v':
+			puts("Векторный режим");
+			break;
+		case 'n':
 			{
-			case 1:
-				puts("Введите первое число");
-				scanf("%lf", &x);
-				puts("Введите второе число");
-				scanf("%lf", &y);
-				printf("%lf + %lf = %lf", x, y, doSum(x, y));
+			char a;
+			int operation;
+			double x, y;
+			puts("Приветствую в калькуляторе!");
+			puts("Здесь перечислены операции, поддерживаемые калькулятором:");
+			puts("1. +		(Складывает входные числа)");
+			puts("2. -		(Вычитает второе число из первого");
+			puts("3. *		(Умножает первое число на второе)");
+			puts("4. /		(Делит первое число на второе)");
+			puts("5. !		(Находит факториал числа)");
+			puts("6. pow		(Возводит число в степень другого числа, работает только с целыми числами");
+			puts("7. ln		(Находит натуральный логарифм числа)");
+			puts("8. sqrt		(Находит квадратный корень числа)");
+			puts("9. cbrt		(Находит кубический корень числа)");
+			puts("10. abs		(Находит модуль числа");
+			puts("11. exp		(Находит экспоненту в степени числа)");
+			puts("Введите номер операции из списка, затем два числа по порядку");
+			while (a != 'n')
+				{
+				puts("Введите номер операции из списка");
+				scanf(" %i", &operation);
+				switch (operation)
+					{
+					case 1:
+						puts("Введите первое число");
+						scanf("%lf", &x);
+						puts("Введите второе число");
+						scanf("%lf", &y);
+						printf("%lf + %lf = %lf", x, y, doSum(x, y));
+						break;
+					case 2:
+						puts("Введите первое число");
+						scanf("%lf", &x);
+						puts("Введите второе число");
+						scanf("%lf", &y);
+						printf("%lf - %lf = %lf", x, y, doSubstraction(x, y));
+						break;
+					case 3:
+						puts("Введите первое число");
+						scanf("%lf", &x);
+						puts("Введите второе число");
+						scanf("%lf", &y);
+						printf("%lf * %lf = %lf", x, y, doMultiply(x, y));
+						break;
+					case 4:
+						puts("Введите первое число");
+						scanf("%lf", &x);
+						puts("Введите второе число");
+						scanf("%lf", &y);
+						printf("%lf / %lf = %lf", x, y, doDivision(x, y));
+						break;
+					case 5:
+						puts("Введите число");
+						scanf("%lf", &x);
+						printf("%lf! = %llu", x, doFactorial(x));
+						break;
+					case 6:
+						puts("Введите число для возведения в степень");
+						scanf("%lf", &x);
+						puts("Введите степень, в которую нужно возвести число");
+						scanf("%lf", &y);
+						printf("%lf^%lf = %llu", x, y, doPow(x, y));
+						break;
+					case 7:
+						puts("Введите число для нахождения натурального логарифма");
+						scanf("%lf", &x);
+						printf("ln(%lf) = %.3lf", x, doLn(x));
+						break;
+					case 8:
+						puts("Введите число для нахождения квадратного корня");
+						scanf("%lf", &x);
+						printf("sqrt(%lf) = %.3lf", x, doSqrt(x));
+						break;
+					case 9:
+						puts("Введите число для нахождения кубического корня");
+						scanf("%lf", &x);
+						printf("cbrt(%lf) = %.3lf", x, doCbrt(x));
+						break;
+					case 10:
+						puts("Введите число для нахождения модуля");
+						scanf("%lf", &x);
+						printf("abs(%lf) = %lf", x, doAbs(x));
+						break;
+					case 11:
+						puts("Введите число для нахождения экспоненты");
+						scanf("%lf", &x);
+						printf("exp(%lf) = %.3lf", x, doExp(x));
+						break;
+					default:
+						puts("Такой операции нет, повторите ввод");
+					}
+				puts("\nПродолжить работу? y - да, n - нет");
+				scanf(" %c", &a);
+				}
 				break;
-			case 2:
-				puts("Введите первое число");
-				scanf("%lf", &x);
-				puts("Введите второе число");
-				scanf("%lf", &y);
-				printf("%lf - %lf = %lf", x, y, doSubstraction(x, y));
-				break;
-			case 3:
-				puts("Введите первое число");
-				scanf("%lf", &x);
-				puts("Введите второе число");
-				scanf("%lf", &y);
-				printf("%lf * %lf = %lf", x, y, doMultiply(x, y));
-				break;
-			case 4:
-				puts("Введите первое число");
-				scanf("%lf", &x);
-				puts("Введите второе число");
-				scanf("%lf", &y);
-				printf("%lf / %lf = %lf", x, y, doDivision(x, y));
-				break;
-			case 5:
-				puts("Введите число");
-				scanf("%lf", &x);
-				printf("%lf! = %llu", x, doFactorial(x));
-				break;
-			case 6:
-				puts("Введите число для возведения в степень");
-				scanf("%lf", &x);
-				puts("Введите степень, в которую нужно возвести число");
-				scanf("%lf", &y);
-				printf("%lf^%lf = %llu", x, y, doPow(x, y));
-				break;
-			case 7:
-				puts("Введите число для нахождения натурального логарифма");
-				scanf("%lf", &x);
-				printf("ln(%lf) = %.3lf", x, doLn(x));
-				break;
-			case 8:
-				puts("Введите число для нахождения квадратного корня");
-				scanf("%lf", &x);
-				printf("sqrt(%lf) = %.3lf", x, doSqrt(x));
-				break;
-			case 9:
-				puts("Введите число для нахождения кубического корня");
-				scanf("%lf", &x);
-				printf("cbrt(%lf) = %.3lf", x, doCbrt(x));
-				break;
-			case 10:
-				puts("Введите число для нахождения модуля");
-				scanf("%lf", &x);
-				printf("abs(%lf) = %lf", x, doAbs(x));
-				break;
-			case 11:
-				puts("Введите число для нахождения экспоненты");
-				scanf("%lf", &x);
-				printf("exp(%lf) = %.3lf", x, doExp(x));
-				break;
-			default:
-				puts("Такой операции нет, повторите ввод");
 			}
-	puts("\nПродолжить работу? y - да, n - нет");
-	scanf(" %c", &a);
+		default: puts("Такого режима нет");
 		}
 	}
 
@@ -385,6 +416,3 @@ int main(int argc, char* argv[])
 		}
 	return 0;
 	}
-
-
-
