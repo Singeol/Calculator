@@ -1,7 +1,7 @@
-Calculator C Project with 11 basic functions and 3 vector functions.
-This project is designed to practice the skills of using the C language.
-The C programming language is used, the MinGW-W64 compiler gcc 11.2.0.
-To run, clone the repository and import into Eclipse, or by the src path. Build and run the Calculator.c file
+Calculator C Project with 11 basic functions and 3 vector functions.\
+This project is designed to practice the skills of using the C language.\
+The C programming language is used, the MinGW-W64 compiler gcc 11.2.0.\
+To run, clone the repository and import into Eclipse, or by the src path. Build and run the Calculator.c file\
 Welcome to calculator!
 Here are the main operations supported by the normal mode:
 1. '+'    	(Adds up the input numbers)
@@ -15,9 +15,6 @@ Here are the main operations supported by the normal mode:
 9. 'cbrt'	  (Finds the cubic root of a number)
 10. 'abs'	  (Finds the number module)
 11. 'exp'	  (Finds the exponent in the power of a number)
-Enter the operation number from the list, then two numbers in order
-Here are the main operations supported by the vector mode:
 1. '+'		(Adds vectors)
 2. '-'		(Subtracts the second vector from the first)
 3. '*'		(Calculates the scalar product of vectors)
-Enter the operation number from the list, then the coordinates of the vectors in order
