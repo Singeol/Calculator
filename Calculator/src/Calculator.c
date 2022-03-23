@@ -55,6 +55,51 @@ void doSumVector(int size)
 	free(result);
 	}
 
+/* Функция для разности векторов
+ * Function for the difference of vectors*/
+void doSubstractionVector(int size)
+	{
+	double *x, *y, *result;
+	x = malloc(size*sizeof(int));
+	y = malloc(size*sizeof(int));
+	result = malloc(size*sizeof(int));
+	for (int i = 0; i < size; i++) scanf("%lf", &x[i]);
+	for (int i = 0; i < size; i++) scanf("%lf", &y[i]);
+	for (int i = 0; i < size; i++) result[i] =  x[i] - y[i];
+	printf("(");
+	for (int i = 0; i < size; i++)
+	{
+		if (i == size - 1)
+		{
+			printf("%lf", x[i]);
+		}
+		else printf("%lf ", x[i]);
+	}
+	printf(" ) + ( ");
+	for (int i = 0; i < size; i++)
+	{
+		if (i == size - 1)
+		{
+			printf("%lf", y[i]);
+		}
+		else printf("%lf ", y[i]);
+	}
+	printf(") = (");
+	for (int i = 0; i < size; i++)
+	{
+		if (i == size - 1)
+		{
+			printf("%lf", result[i]);
+		}
+		else printf("%lf ", result[i]);
+	}
+	printf(")\n");
+	free(x);
+	free(y);
+	free(result);
+	}
+
+
 /* Функция для нахождения модуля числа
  * Function for finding the modulus of a number*/
 double doAbs(double x)
@@ -210,7 +255,7 @@ void en(void)
 			int size;
 			puts("Vector mode");
 			scanf("%i", &size);
-			doSumVector(size);
+			doSubstractionVector(size);
 			break;
 		case 'n':
 			{
