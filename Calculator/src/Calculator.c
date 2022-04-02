@@ -16,9 +16,9 @@
 void doSumVector(int size)
 	{
 	double *x, *y, *result;
-	x = malloc(size*sizeof(int));
-	y = malloc(size*sizeof(int));
-	result = malloc(size*sizeof(int));
+	x = malloc(size*sizeof(double));
+	y = malloc(size*sizeof(double));
+	result = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) scanf("%lf", &x[i]);
 	for (int i = 0; i < size; i++) scanf("%lf", &y[i]);
 	for (int i = 0; i < size; i++) result[i] =  x[i] + y[i];
@@ -60,9 +60,9 @@ void doSumVector(int size)
 void doSubstractionVector(int size)
 	{
 	double *x, *y, *result;
-	x = malloc(size*sizeof(int));
-	y = malloc(size*sizeof(int));
-	result = malloc(size*sizeof(int));
+	x = malloc(size*sizeof(double));
+	y = malloc(size*sizeof(double));
+	result = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) scanf("%lf", &x[i]);
 	for (int i = 0; i < size; i++) scanf("%lf", &y[i]);
 	for (int i = 0; i < size; i++) result[i] =  x[i] - y[i];
@@ -104,8 +104,8 @@ void doSubstractionVector(int size)
 void doMultiplyVector(int size)
 	{
 	double *x, *y, result = 0;
-	x = malloc(size*sizeof(int));
-	y = malloc(size*sizeof(int));
+	x = malloc(size*sizeof(double));
+	y = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) scanf("%lf", &x[i]);
 	for (int i = 0; i < size; i++) scanf("%lf", &y[i]);
 	for (int i = 0; i < size; i++) result +=  x[i] * y[i];
