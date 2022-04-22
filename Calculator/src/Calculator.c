@@ -113,7 +113,7 @@ void doMultiplyVector(int size){
 		}
 		else fprintf(fout, "%lf ", y[i]);
 	}
-	fprintf(fout, ") = %lf", result);
+	fprintf(fout, ") = %lf\n", result);
 	free(x);
 	free(y);
 }
@@ -195,109 +195,113 @@ int main(int argc, char* argv[]){
 	setvbuf(stderr, NULL, _IONBF, 0);
 	char input[259], output[259];
 	char operation, mode;
-	char a;
+	char a, b;
 	do{
 		puts("Enter filename to input");
 		scanf("%s", input);
 		puts("Enter filename to output");
 		scanf("%s", output);
 		fin = fopen(input, "r");
-		fout = fopen(output, "w");
-		fscanf(fin,"%c %c", &operation, &mode);
-		switch (mode){
-			case 'v':
-				int size;
-				puts("Welcome to vector mode calculator!");
-				puts("Here are the main operations supported by the vector mode:");
-				puts("1. +		(Adds vectors)");
-				puts("2. -		(Subtracts the second vector from the first)");
-				puts("3. *		(Calculates the scalar product of vectors)");
-				puts("Enter the operation from the list, then the coordinates of the vectors in order)");
-				puts("Enter the operation from the list");
-				fscanf(fin, "%i", &size);
-				switch (operation){
-					case '+':
-						doSumVector(size);
-						fclose(fout);
-						break;
-					case '-':
-						doSubstractionVector(size);
-						fclose(fout);
-						break;
-					case '*':
-						doMultiplyVector(size);
-						fclose(fout);
-						break;
-					default:
-						fprintf(fout, "There is no such operation, repeat the input");
-						fclose(fin);
-						fclose(fout);
-				}
-				break;
-			case 'n':
-				double x, y;
-				puts("Welcome to normal mode calculator!");
-				puts("Here are the main operations supported by the normal mode:");
-				puts("1. +		(Adds up the input numbers)");
-				puts("2. -		(Subtracts the second number from the first)");
-				puts("3. *		(Multiplies the first number by the second)");
-				puts("4. /		(Divides the first number by the second)");
-				puts("5. !		(Finds the factorial of a number)");
-				puts("6. ^		(Raises a number to the power of another number, works only with integers");
-				puts("Enter the operation from the list, then two numbers in order");
-				puts("Enter the operation from the list");
-//				scanf(" %c", &operation);
-				switch (operation){
-					case '+':
-						fscanf(fin, "%lf %lf", &x, &y);
-						fprintf(fout, "%lf + %lf = %lf", x, y, doSum(x, y));
-						fclose(fin);
-						fclose(fout);
-						break;
-					case '-':
-						fscanf(fin, "%lf %lf", &x, &y);
-						fprintf(fout, "%lf - %lf = %lf", x, y, doSubstraction(x, y));
-						fclose(fin);
-						fclose(fout);
-						break;
-					case '*':
-						fscanf(fin, "%lf %lf", &x, &y);
-						fprintf(fout, "%lf * %lf = %lf", x, y, doMultiply(x, y));
-						fclose(fin);
-						fclose(fout);
-						break;
-					case '/':
-						fscanf(fin, "%lf %lf", &x, &y);
-						fprintf(fout, "%lf / %lf = %lf", x, y, doDivision(x, y));
-						fclose(fin);
-						fclose(fout);
-						break;
-					case '!':
-						fscanf(fin, "%lf", &x);
-						fprintf(fout, "%lf! = %llu", x, doFactorial(x));
-						fclose(fin);
-						fclose(fout);
-						break;
-					case '^':
-						fscanf(fin, "%lf %lf", &x, &y);
-						fprintf(fout, "%lf^%lf = %llu", x, y, doPow(x, y));
-						fclose(fin);
-						fclose(fout);
-						break;
-					default:
-						fprintf(fout, "There is no such operation, repeat the input");
-						fclose(fin);
-						fclose(fout);
-				}
-				break;
-		default:
-			fprintf(fout, "There is no such mode");
-			fclose(fin);
-			fclose(fout);
-		}
-		puts("\nContinue working? y - yes, n - no");
-		scanf(" %c", &a);
+//		fout = fopen(output, "w");
+			do{
+			if ((fout = fopen(output, "a")) == NULL){
+				fout = fopen(output, "w");
+			}
+			fscanf(fin," %c %c", &operation, &mode);
+			switch (mode){
+				case 'v':
+					int size;
+//					puts("Welcome to vector mode calculator!");
+//					puts("Here are the main operations supported by the vector mode:");
+//					puts("1. +		(Adds vectors)");
+//					puts("2. -		(Subtracts the second vector from the first)");
+//					puts("3. *		(Calculates the scalar product of vectors)");
+//					puts("Enter the operation from the list, then the coordinates of the vectors in order)");
+//					puts("Enter the operation from the list");
+					fscanf(fin, "%i", &size);
+					switch (operation){
+						case '+':
+							doSumVector(size);
+							fclose(fout);
+							break;
+						case '-':
+							doSubstractionVector(size);
+							fclose(fout);
+							break;
+						case '*':
+							doMultiplyVector(size);
+							fclose(fout);
+							break;
+						default:
+							fprintf(fout, "There is no such operation, repeat the input\n");
+							fclose(fout);
+					}
+					break;
+				case 'n':
+					double x, y;
+//					puts("Welcome to normal mode calculator!");
+//					puts("Here are the main operations supported by the normal mode:");
+//					puts("1. +		(Adds up the input numbers)");
+//					puts("2. -		(Subtracts the second number from the first)");
+//					puts("3. *		(Multiplies the first number by the second)");
+//					puts("4. /		(Divides the first number by the second)");
+//					puts("5. !		(Finds the factorial of a number)");
+//					puts("6. ^		(Raises a number to the power of another number, works only with integers");
+//					puts("Enter the operation from the list, then two numbers in order");
+//					puts("Enter the operation from the list");
+					switch (operation){
+						case '+':
+							fscanf(fin, "%lf %lf", &x, &y);
+							fprintf(fout, "%lf + %lf = %lf\n", x, y, doSum(x, y));
+							fclose(fout);
+							break;
+						case '-':
+							fscanf(fin, "%lf %lf", &x, &y);
+							fprintf(fout, "%lf - %lf = %lf\n", x, y, doSubstraction(x, y));
+							fclose(fout);
+							break;
+						case '*':
+							fscanf(fin, "%lf %lf", &x, &y);
+							fprintf(fout, "%lf * %lf = %lf\n", x, y, doMultiply(x, y));
+							fclose(fout);
+							break;
+						case '/':
+							fscanf(fin, "%lf %lf", &x, &y);
+							fprintf(fout, "%lf / %lf = %lf\n", x, y, doDivision(x, y));
+							fclose(fout);
+							break;
+						case '!':
+							fscanf(fin, "%lf", &x);
+							fprintf(fout, "%lf! = %llu\n", x, doFactorial(x));
+							fclose(fout);
+							break;
+						case '^':
+							fscanf(fin, "%lf %lf", &x, &y);
+							fprintf(fout, "%lf^%lf = %llu\n", x, y, doPow(x, y));
+							fclose(fout);
+							break;
+						default:
+							fprintf(fout, "There is no such operation, repeat the input\n");
+							fclose(fout);
+					}
+					break;
+				default:
+					fprintf(fout, "There is no such mode\n");
+					fclose(fin);
+					fclose(fout);
+			}
+			fscanf(fin," %c", &a);
+			if (a!='y' && a!='n'){
+				a='n';
+			}
+			}while(a!='n');
+		fclose(fin);
+		fclose(fout);
+		puts("Continue working? y - yes, n - no");
+		scanf(" %c", &b);
 	}
-	while(a!='n');
+	while(b!='n');
+	fclose(fin);
+	fclose(fout);
 	return 0;
 }
