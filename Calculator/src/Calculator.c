@@ -22,7 +22,6 @@ void doSumVector(int size){
 	result = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &x[i]);
 	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &y[i]);
-	fclose(fin);
 	for (int i = 0; i < size; i++) result[i] =  x[i] + y[i];
 	fprintf(fout, "(");
 	for (int i = 0; i < size; i++){
@@ -60,7 +59,6 @@ void doSubstractionVector(int size){
 	result = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &x[i]);
 	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &y[i]);
-	fclose(fin);
 	for (int i = 0; i < size; i++) result[i] =  x[i] - y[i];
 	fprintf(fout, "(");
 	for (int i = 0; i < size; i++){
@@ -97,7 +95,6 @@ void doMultiplyVector(int size){
 	y = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &x[i]);
 	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &y[i]);
-	fclose(fin);
 	for (int i = 0; i < size; i++) result +=  x[i] * y[i];
 	fprintf(fout, "(");
 	for (int i = 0; i < size; i++){
@@ -202,12 +199,16 @@ int main(int argc, char* argv[]){
 		puts("Enter filename to output");
 		scanf("%s", output);
 		fin = fopen(input, "r");
-//		fout = fopen(output, "w");
 			do{
 			if ((fout = fopen(output, "a")) == NULL){
 				fout = fopen(output, "w");
 			}
 			fscanf(fin," %c %c", &operation, &mode);
+			printf("%c", operation);
+			printf("%c", mode);
+			if (operation != '+' && operation != '-' && operation != '*' && operation != '/' && operation != '!' && operation != '^'){
+				a = 'n';
+			}
 			switch (mode){
 				case 'v':
 					int size;
@@ -287,14 +288,9 @@ int main(int argc, char* argv[]){
 					break;
 				default:
 					fprintf(fout, "There is no such mode\n");
-					fclose(fin);
 					fclose(fout);
 			}
-			fscanf(fin," %c", &a);
-			if (a!='y' && a!='n'){
-				a='n';
-			}
-			}while(a!='n');
+			}while(a != 'n');
 		fclose(fin);
 		fclose(fout);
 		puts("Continue working? y - yes, n - no");
