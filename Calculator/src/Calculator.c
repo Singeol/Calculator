@@ -192,7 +192,7 @@ int main(int argc, char* argv[]){
 	setvbuf(stderr, NULL, _IONBF, 0);
 	char input[259], output[259];
 	char operation, mode;
-	char a, b;
+	char b;
 	do{
 		puts("Enter filename to input");
 		scanf("%s", input);
@@ -204,10 +204,8 @@ int main(int argc, char* argv[]){
 				fout = fopen(output, "w");
 			}
 			fscanf(fin," %c %c", &operation, &mode);
-			printf("%c", operation);
-			printf("%c", mode);
 			if (operation != '+' && operation != '-' && operation != '*' && operation != '/' && operation != '!' && operation != '^'){
-				a = 'n';
+				break;
 			}
 			switch (mode){
 				case 'v':
@@ -290,7 +288,7 @@ int main(int argc, char* argv[]){
 					fprintf(fout, "There is no such mode\n");
 					fclose(fout);
 			}
-			}while(a != 'n');
+			}while(1 == 1);
 		fclose(fin);
 		fclose(fout);
 		puts("Continue working? y - yes, n - no");
