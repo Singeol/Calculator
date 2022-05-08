@@ -4,115 +4,39 @@
  Author      : Semyon Mikhailov
  Version     :
  Copyright   :
- Description : Calculator with 11 basic functions
+ Description :
  ============================================================================
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
+double *x, *y, *result;
+
 FILE *fin, *fout; //Declare variables for work with files
 
 /* Функция для сложения векторов
  * Function for adding vectors*/
-void doSumVector(int size){
-	double *x, *y, *result;
-	x = malloc(size*sizeof(double));
-	y = malloc(size*sizeof(double));
+double* doSumVector(double *x, double *y, int size){
 	result = malloc(size*sizeof(double));
-	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &x[i]);
-	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &y[i]);
 	for (int i = 0; i < size; i++) result[i] =  x[i] + y[i];
-	fprintf(fout, "(");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", x[i]);
-		}
-		else fprintf(fout, "%lf ", x[i]);
-	}
-	fprintf(fout, " ) + ( ");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", y[i]);
-		}
-		else fprintf(fout, "%lf ", y[i]);
-	}
-	fprintf(fout, ") = (");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", result[i]);
-		}
-		else fprintf(fout, "%lf ", result[i]);
-	}
-	fprintf(fout, ")\n");
-	free(x);
-	free(y);
-	free(result);
+	return result;
 }
 
 /* Функция для разности векторов
  * Function for the difference of vectors*/
-void doSubstractionVector(int size){
-	double *x, *y, *result;
-	x = malloc(size*sizeof(double));
-	y = malloc(size*sizeof(double));
+double* doSubstractionVector(double *x, double *y, int size){
 	result = malloc(size*sizeof(double));
-	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &x[i]);
-	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &y[i]);
 	for (int i = 0; i < size; i++) result[i] =  x[i] - y[i];
-	fprintf(fout, "(");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", x[i]);
-		}
-		else fprintf(fout, "%lf ", x[i]);
-	}
-	fprintf(fout, " ) - ( ");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", y[i]);
-		}
-		else fprintf(fout, "%lf ", y[i]);
-	}
-	fprintf(fout, ") = (");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", result[i]);
-		}
-		else fprintf(fout, "%lf ", result[i]);
-	}
-	fprintf(fout, ")\n");
-	free(x);
-	free(y);
-	free(result);
+	return result;
 }
 
 /* Функция для умножения векторов
  * Function for multiplying vectors*/
-void doMultiplyVector(int size){
-	double *x, *y, result = 0;
-	x = malloc(size*sizeof(double));
-	y = malloc(size*sizeof(double));
-	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &x[i]);
-	for (int i = 0; i < size; i++) fscanf(fin, "%lf", &y[i]);
-	for (int i = 0; i < size; i++) result +=  x[i] * y[i];
-	fprintf(fout, "(");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", x[i]);
-		}
-		else fprintf(fout, "%lf ", x[i]);
-	}
-	fprintf(fout, " ) * ( ");
-	for (int i = 0; i < size; i++){
-		if (i == size - 1){
-			fprintf(fout, "%lf", y[i]);
-		}
-		else fprintf(fout, "%lf ", y[i]);
-	}
-	fprintf(fout, ") = %lf\n", result);
-	free(x);
-	free(y);
+double* doMultiplyVector(double *x, double *y, int size){
+	result = malloc(1*sizeof(double));
+	for (int i = 0; i < size; i++) *result +=  x[i] * y[i];
+	return result;
 }
 
 /* Функция для нахождения модуля числа
@@ -199,103 +123,116 @@ int main(int argc, char* argv[]){
 		puts("Enter filename to output");
 		scanf("%s", output);
 		fin = fopen(input, "r");
-			do{
+			while (feof(fin) == 0){
 			if ((fout = fopen(output, "a")) == NULL){
 				fout = fopen(output, "w");
 			}
 			fscanf(fin," %c %c", &operation, &mode);
-			if (operation != '+' && operation != '-' && operation != '*' && operation != '/' && operation != '!' && operation != '^'){
-				break;
-			}
 			switch (mode){
 				case 'v':
 					int size;
-//					puts("Welcome to vector mode calculator!");
-//					puts("Here are the main operations supported by the vector mode:");
-//					puts("1. +		(Adds vectors)");
-//					puts("2. -		(Subtracts the second vector from the first)");
-//					puts("3. *		(Calculates the scalar product of vectors)");
-//					puts("Enter the operation from the list, then the coordinates of the vectors in order)");
-//					puts("Enter the operation from the list");
 					fscanf(fin, "%i", &size);
+					x = malloc(size*sizeof(double));
+					y = malloc(size*sizeof(double));
+					for (int i = 0; i < size; i++) fscanf(fin, "%lf", &x[i]);
+					for (int i = 0; i < size; i++) fscanf(fin, "%lf", &y[i]);
 					switch (operation){
 						case '+':
-							doSumVector(size);
-							fclose(fout);
+							doSumVector(x, y, size);
 							break;
 						case '-':
-							doSubstractionVector(size);
-							fclose(fout);
+							doSubstractionVector(x, y, size);
 							break;
 						case '*':
-							doMultiplyVector(size);
-							fclose(fout);
+							doMultiplyVector(x, y, size);
 							break;
 						default:
 							fprintf(fout, "There is no such operation, repeat the input\n");
 							fclose(fout);
 					}
+					fprintf(fout, "( ");
+					for (int i = 0; i < size; i++){
+						if (i == size - 1){
+							fprintf(fout, "%lf", x[i]);
+						}
+						else fprintf(fout, "%lf ", x[i]);
+					}
+					fprintf(fout, " ) %c ( ", operation);
+					for (int i = 0; i < size; i++){
+						if (i == size - 1){
+							fprintf(fout, "%lf", y[i]);
+						}
+						else fprintf(fout, "%lf ", y[i]);
+					}
+					if (operation == '+' || operation == '-'){
+						fprintf(fout, " ) = ( ");
+						for (int i = 0; i < size; i++){
+							if (i == size - 1){
+								fprintf(fout, "%lf", result[i]);
+							}
+							else fprintf(fout, "%lf ", result[i]);
+						}
+						fprintf(fout, " )\n");
+					}
+					else{
+						fprintf(fout, " ) = %lf\n", *result);
+					}
+					free(x);
+					free(y);
+					free(result);
+					fclose(fout);
 					break;
 				case 'n':
-					double x, y;
-//					puts("Welcome to normal mode calculator!");
-//					puts("Here are the main operations supported by the normal mode:");
-//					puts("1. +		(Adds up the input numbers)");
-//					puts("2. -		(Subtracts the second number from the first)");
-//					puts("3. *		(Multiplies the first number by the second)");
-//					puts("4. /		(Divides the first number by the second)");
-//					puts("5. !		(Finds the factorial of a number)");
-//					puts("6. ^		(Raises a number to the power of another number, works only with integers");
-//					puts("Enter the operation from the list, then two numbers in order");
-//					puts("Enter the operation from the list");
+					x = malloc(1 * sizeof(double));
+					y = malloc(1 * sizeof(double));
 					switch (operation){
 						case '+':
-							fscanf(fin, "%lf %lf", &x, &y);
-							fprintf(fout, "%lf + %lf = %lf\n", x, y, doSum(x, y));
+							fscanf(fin, "%lf %lf", x, y);
+							fprintf(fout, "%lf + %lf = %lf\n", *x, *y, doSum(*x, *y));
 							fclose(fout);
 							break;
 						case '-':
-							fscanf(fin, "%lf %lf", &x, &y);
-							fprintf(fout, "%lf - %lf = %lf\n", x, y, doSubstraction(x, y));
+							fscanf(fin, "%lf %lf", x, y);
+							fprintf(fout, "%lf - %lf = %lf\n", *x, *y, doSubstraction(*x, *y));
 							fclose(fout);
 							break;
 						case '*':
-							fscanf(fin, "%lf %lf", &x, &y);
-							fprintf(fout, "%lf * %lf = %lf\n", x, y, doMultiply(x, y));
+							fscanf(fin, "%lf %lf", x, y);
+							fprintf(fout, "%lf * %lf = %lf\n", *x, *y, doMultiply(*x, *y));
 							fclose(fout);
 							break;
 						case '/':
-							fscanf(fin, "%lf %lf", &x, &y);
-							fprintf(fout, "%lf / %lf = %lf\n", x, y, doDivision(x, y));
+							fscanf(fin, "%lf %lf", x, y);
+							fprintf(fout, "%lf / %lf = %lf\n", *x, *y, doDivision(*x, *y));
 							fclose(fout);
 							break;
 						case '!':
-							fscanf(fin, "%lf", &x);
-							fprintf(fout, "%lf! = %llu\n", x, doFactorial(x));
+							fscanf(fin, "%lf", x);
+							fprintf(fout, "%lf! = %llu\n", *x, doFactorial(*x));
 							fclose(fout);
 							break;
 						case '^':
-							fscanf(fin, "%lf %lf", &x, &y);
-							fprintf(fout, "%lf^%lf = %llu\n", x, y, doPow(x, y));
+							fscanf(fin, "%lf %lf", x, y);
+							fprintf(fout, "%lf^%lf = %llu\n", *x, *y, doPow(*x, *y));
 							fclose(fout);
 							break;
 						default:
 							fprintf(fout, "There is no such operation, repeat the input\n");
 							fclose(fout);
 					}
+					free(x);
+					free(y);
 					break;
 				default:
 					fprintf(fout, "There is no such mode\n");
 					fclose(fout);
+				}
 			}
-			}while(1 == 1);
 		fclose(fin);
 		fclose(fout);
 		puts("Continue working? y - yes, n - no");
 		scanf(" %c", &b);
 	}
 	while(b!='n');
-	fclose(fin);
-	fclose(fout);
 	return 0;
 }
