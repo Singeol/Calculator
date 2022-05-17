@@ -17,26 +17,23 @@ FILE *fin, *fout; //Declare variables for work with files
 
 /* Функция для сложения векторов
  * Function for adding vectors*/
-double* doSumVector(double *x, double *y, int size){
+void doSumVector(double *x, double *y, int size){
 	result = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) result[i] =  x[i] + y[i];
-	return result;
 }
 
 /* Функция для разности векторов
  * Function for the difference of vectors*/
-double* doSubstractionVector(double *x, double *y, int size){
+void doSubstractionVector(double *x, double *y, int size){
 	result = malloc(size*sizeof(double));
 	for (int i = 0; i < size; i++) result[i] =  x[i] - y[i];
-	return result;
 }
 
 /* Функция для умножения векторов
  * Function for multiplying vectors*/
-double* doMultiplyVector(double *x, double *y, int size){
+void doMultiplyVector(double *x, double *y, int size){
 	result = malloc(1*sizeof(double));
 	for (int i = 0; i < size; i++) *result +=  x[i] * y[i];
-	return result;
 }
 
 /* Функция для нахождения модуля числа
@@ -123,10 +120,10 @@ int main(int argc, char* argv[]){
 		puts("Enter filename to output");
 		scanf("%s", output);
 		fin = fopen(input, "r");
-			while (feof(fin) == 0){
-			if ((fout = fopen(output, "a")) == NULL){
-				fout = fopen(output, "w");
-			}
+		if ((fout = fopen(output, "a")) == NULL){
+			fout = fopen(output, "w");
+		}
+		while (feof(fin) == 0){
 			fscanf(fin," %c %c", &operation, &mode);
 			switch (mode){
 				case 'v':
@@ -180,7 +177,6 @@ int main(int argc, char* argv[]){
 					free(x);
 					free(y);
 					free(result);
-					fclose(fout);
 					break;
 				case 'n':
 					x = malloc(1 * sizeof(double));
@@ -189,43 +185,35 @@ int main(int argc, char* argv[]){
 						case '+':
 							fscanf(fin, "%lf %lf", x, y);
 							fprintf(fout, "%lf + %lf = %lf\n", *x, *y, doSum(*x, *y));
-							fclose(fout);
 							break;
 						case '-':
 							fscanf(fin, "%lf %lf", x, y);
 							fprintf(fout, "%lf - %lf = %lf\n", *x, *y, doSubstraction(*x, *y));
-							fclose(fout);
 							break;
 						case '*':
 							fscanf(fin, "%lf %lf", x, y);
 							fprintf(fout, "%lf * %lf = %lf\n", *x, *y, doMultiply(*x, *y));
-							fclose(fout);
 							break;
 						case '/':
 							fscanf(fin, "%lf %lf", x, y);
 							fprintf(fout, "%lf / %lf = %lf\n", *x, *y, doDivision(*x, *y));
-							fclose(fout);
 							break;
 						case '!':
 							fscanf(fin, "%lf", x);
 							fprintf(fout, "%lf! = %llu\n", *x, doFactorial(*x));
-							fclose(fout);
 							break;
 						case '^':
 							fscanf(fin, "%lf %lf", x, y);
 							fprintf(fout, "%lf^%lf = %llu\n", *x, *y, doPow(*x, *y));
-							fclose(fout);
 							break;
 						default:
 							fprintf(fout, "There is no such operation, repeat the input\n");
-							fclose(fout);
 					}
 					free(x);
 					free(y);
 					break;
 				default:
 					fprintf(fout, "There is no such mode\n");
-					fclose(fout);
 				}
 			}
 		fclose(fin);
