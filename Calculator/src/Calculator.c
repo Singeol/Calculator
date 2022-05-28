@@ -100,28 +100,30 @@ void pushElement(Element** head){
 	return;
 }
 
-/* Функция для очистки списка входных данных
- * Function for clear input data list
- */
-void deleteElements(Element *head){
-	Element *current;
-	while (head != NULL){
-		current = head;
-		head = head->next;
-		free(current);
-	}
+// Удаляет первый элемент исходного списка
+void deleteElement(Element **head) {
+  Element *tmp;
+
+  if(head == NULL || *head == NULL) return;
+
+  tmp = *head;
+
+  *head = (*head)->next;
+
+  free(tmp);
 }
 
-/* Функция для очистки списка результата
- * Fucntion for clear output data list
- */
-void deleteResults(Result *head){
-	Result *current;
-	while (head != NULL){
-		current = head;
-		head = head->next;
-		free(current);
-	}
+// Удаляет первый элемент результата
+void deleteResult(Result **head){
+	Result *tmp;
+
+	if(head == NULL || *head == NULL) return;
+
+	tmp = *head;
+
+	*head = (*head)->next;
+
+	free(tmp);
 }
 
 /* Функция для перемещения вперёд по списку
@@ -160,7 +162,8 @@ double* doSubstractionVector(double *x, double *y, int size){
  * Function for multiplying vectors*/
 double* doMultiplyVector(double *x, double *y, int size){
 	double *result;
-	result = malloc(1*sizeof(double));
+	result = malloc(sizeof(double));
+	*result = 0;
 	for (int i = 0; i < size; i++) *result +=  x[i] * y[i];
 	return result;
 }
@@ -380,8 +383,12 @@ int main(int argc, char* argv[]){
 			res_current = nextResult(res_current);
 		}
 		fclose(fout);
-		deleteElements(head);
-		deleteResults(res_head);
+		while (head != NULL){
+			deleteElement(&head);
+		}
+		while (res_head != NULL){
+			deleteResult(&res_head);
+		}
 		puts("Continue working? y - yes, n - no");
 		scanf(" %c", &b);
 	}
