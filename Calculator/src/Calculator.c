@@ -11,58 +11,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-/* Структура для хранения входных данных
- * Structure for storing input data
- * */
-struct Element {
-    char operation, mode;
-    int size;
-    double *x, *y;
-    struct Element *next;
-};
-
-/* Структура для хранения выходных данных
- * Structure for storing output data
- * */
-struct Result {
-	int size;
-    double *res;
-    struct Result *next;
-};
-
-typedef struct Element Element;
-typedef struct Result Result;
-
 FILE *fin, *fout; //Declare variables for work with files
 
-/* Функция для загрузки результата в структуру
- * Fucnction for upload data to output structure
- * */
-void pushResult(Result** head, int size, double *data){
-	Result* tmp = (Result*) malloc(sizeof(Result));
-	Result *last = *head;
-	tmp->size = size;
-	tmp->res = data;
-	tmp->next = NULL;
-		if(*head == NULL){
-			*head = tmp;
-			return;
-		}
+/* Структура для хранения данных
+ * Structure for store the data
+*/
+typedef struct data {
+	char mode, operation;
+	int size;
+	double *x, *y;
+	double *result;
+} data;
 
-	while (last->next != NULL){
-		last = last->next;
-	}
-	last->next = tmp;
-	return;
+/* Структура для описания элемента очереди
+ * Structure for declare element of queue
+ */
+typedef struct node {
+	char mode, operation;
+	int size;
+	double *x, *y;
+	double *result;
+	struct node *next;
+} node;
+
+/* Структура для описания очереди
+ * Structure for describing the queue
+ */
+typedef struct {
+	node *head;
+	node *tail;
+} queue;
+
+/* Функция для инициализирования очереди
+ * Function to initialize the queue
+ */
+void init_queue(queue *q) {
+	q->head = NULL;
+	q->tail = NULL;
 }
 
-/* Функция для добавления входных данных в конец списка
- * Function for add input data to end of list
+/* Функция для добавления элемента в очередь
+ * Fucntion for add element of queue
  */
-void pushElement(Element** head){
-	Element* tmp = (Element*) malloc(sizeof(Element));
-	Element *last = *head;
+void enqueueIn(queue *q) {
+
+	//create a new node
+	node * tmp = malloc(sizeof(node));
 	fscanf(fin," %c %c", &tmp->operation, &tmp->mode);
 	switch (tmp->mode){
 		case 'n':
@@ -87,57 +81,71 @@ void pushElement(Element** head){
 	        for (int i = 0; i < tmp->size; i++) fscanf(fin, "%lf", &tmp->y[i]);
 	        break;
 	    }
-	tmp->next = NULL;
-	if(*head == NULL){
-		*head = tmp;
-		return;
+
+	if (q->tail != NULL) {
+		q->tail->next = tmp;
 	}
 
-	while (last->next != NULL){
-		last = last->next;
+	q->tail = tmp;
+
+	if(q->head == NULL) {
+		q->head = tmp;
 	}
-	last->next = tmp;
-	return;
 }
 
-// Удаляет первый элемент исходного списка
-void deleteElement(Element **head) {
-  Element *tmp;
+/* Функция для добавления элемента в очередь
+ * Fucntion for add element of queue
+ */
+void enqueueOut(queue *q, data *value) {
 
-  if(head == NULL || *head == NULL) return;
+	node * tmp = malloc(sizeof(node));
+	tmp->operation = value->operation;
+	tmp->mode = value->mode;
+	tmp->result = value->result;
+	tmp->x = value->x;
+	tmp->y = value->y;
+	tmp->size = value->size;
 
-  tmp = *head;
+	if (q->tail != NULL) {
+		q->tail->next = tmp;
+	}
 
-  *head = (*head)->next;
+	q->tail = tmp;
 
-  free(tmp);
+	if(q->head == NULL) {
+		q->head = tmp;
+	}
 }
 
-// Удаляет первый элемент результата
-void deleteResult(Result **head){
-	Result *tmp;
+/* Функция для изъятия данных из очереди
+ * Function to dequeue data
+ */
+data* dequeue(queue *q) {
+	data *result;
+	result = malloc(sizeof(data));
 
-	if(head == NULL || *head == NULL) return;
+	if (q->head == NULL){
+		result = NULL;
+		return result;
+	}
 
-	tmp = *head;
+	node *tmp = q->head;
 
-	*head = (*head)->next;
+	result->mode = tmp->mode;
+	result->operation = tmp->operation;
+	result->size = tmp->size;
+	result->x = tmp->x;
+	result->y = tmp->y;
+	result->result = tmp->result;
 
+	//take it off.
+	q->head = q->head->next;
+	if (q->head == NULL) {
+		q->tail = NULL;
+	}
 	free(tmp);
-}
 
-/* Функция для перемещения вперёд по списку
- * Function for move forward through list
- */
-Element* nextElement(Element *current){
-	return current->next;
-}
-
-/* Функция для перемещения вперёд по списку
- * Function for move forward through list
- */
-Result* nextResult(Result *current){
-	return current->next;
+	return result;
 }
 
 /* Функция для сложения векторов
@@ -255,143 +263,134 @@ double* doPow(int x, int y){
 }
 
 
-/* Основная функция, точка входа
- * Main function, entry point*/
-int main(int argc, char* argv[]){
+int main() {
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
-	Element* head; // Указатель на голову списка данных
-	Element* current; // Указатель на текущий элемент списка данных
-	Result* res_head; // Указатель на голову списка результата
-	Result* res_current; // Указатель на текущий элемент списка результата
-	char input[259], output[259]; // Переменные для хранения имени файлов
-	char b; // Переменная продолжения работа
-	do{
-		head = NULL;
-		current = NULL;
-		res_head = NULL;
-		res_current = NULL;
+	queue q1, q2;
+	data *var;
+
+	char input[259], output[259];
+	char b;
+	do {
+		init_queue(&q1);
+		init_queue(&q2);
 		puts("Enter filename to input");
 		scanf("%s", input);
 		puts("Enter filename to output");
 		scanf("%s", output);
 		fin = fopen(input, "r");
-		while (feof(fin) == 0){
-			pushElement(&head);
+		while (feof(fin) == 0) {
+			enqueueIn(&q1);
 		}
 		fclose(fin);
-		current = head;
-		while (current != NULL){
-			switch (current->mode){
+		while ((var = dequeue(&q1)) != NULL) {
+			switch (var->mode) {
 				case 'v':
-					switch (current->operation){
+					switch (var->operation) {
 						case '+':
-							pushResult(&res_head, current->size, doSumVector(current->x, current->y, current->size));
+							var->result = doSumVector(var->x, var->y, var->size);
+							enqueueOut(&q2, var);
 							break;
 						case '-':
-							pushResult(&res_head, current->size, doSubstractionVector(current->x, current->y, current->size));
+							var->result = doSubstractionVector(var->x, var->y, var->size);
+							enqueueOut(&q2, var);
 							break;
 						case '*':
-							pushResult(&res_head, 1, doMultiplyVector(current->x, current->y, current->size));
+							var->result = doMultiplyVector(var->x, var->y, var->size);
+							enqueueOut(&q2, var);
 							break;
 					}
 					break;
-					case 'n':
-						switch (current->operation){
-							case '+':
-								pushResult(&res_head, current->size, doSum(*current->x, *current->y));
-								break;
-							case '-':
-								pushResult(&res_head, current->size, doSubstraction(*current->x, *current->y));
-								break;
-							case '*':
-								pushResult(&res_head, current->size, doMultiply(*current->x, *current->y));
-								break;
-							case '/':
-								pushResult(&res_head, current->size, doDivision(*current->x, *current->y));
-								break;
-							case '!':
-								pushResult(&res_head, current->size, doFactorial(*current->x));
-								break;
-							case '^':
-								pushResult(&res_head, current->size, doPow(*current->x, *current->y));
-								break;
-						}
-						break;
-				}
-			current = nextElement(current);
+				case 'n':
+					switch (var->operation) {
+						case '+':
+							var->result = doSum(*var->x, *var->y);
+							enqueueOut(&q2, var);
+							break;
+						case '-':
+							var->result = doSubstraction(*var->x, *var->y);
+							enqueueOut(&q2, var);
+							break;
+						case '*':
+							var->result = doMultiply(*var->x, *var->y);
+							enqueueOut(&q2, var);
+							break;
+						case '/':
+							var->result = doDivision(*var->x, *var->y);
+							enqueueOut(&q2, var);
+							break;
+						case '!':
+							var->result = doFactorial(*var->x);
+							enqueueOut(&q2, var);
+							break;
+						case '^':
+							var->result = doPow(*var->x, *var->y);
+							enqueueOut(&q2, var);
+							break;
+					}
+					break;
+			}
 		}
-		current = head;
-		res_current = res_head;
-		if ((fout = fopen(output, "a")) == NULL){
+		if ((fout = fopen(output, "a")) == NULL) {
 			fout = fopen(output, "w");
 		}
-		while (current != NULL){
-				switch (current->mode){
-					case 'v':
-						fprintf(fout, "( ");
-						for (int i = 0; i < current->size; i++){
-							if (i == current->size - 1){
-								fprintf(fout, "%lf", current->x[i]);
+		while ((var = dequeue(&q2)) != NULL) {
+			switch (var->mode) {
+				case 'v':
+					fprintf(fout, "( ");
+					for (int i = 0; i < var->size; i++) {
+						if (i == var->size - 1){
+							fprintf(fout, "%lf", var->x[i]);
+						}
+						else fprintf(fout, "%lf ", var->x[i]);
+					}
+					fprintf(fout, " ) %c ( ", var->operation);
+					for (int i = 0; i < var->size; i++){
+						if (i == var->size - 1){
+							fprintf(fout, "%lf", var->y[i]);
+						}
+						else fprintf(fout, "%lf ", var->y[i]);
+					}
+					if (var->operation == '+' || var->operation == '-') {
+						fprintf(fout, " ) = ( ");
+						for (int i = 0; i < var->size; i++) {
+							if (i == var->size - 1){
+								fprintf(fout, "%lf", var->result[i]);
 							}
-							else fprintf(fout, "%lf ", current->x[i]);
+							else fprintf(fout, "%lf ", var->result[i]);
 						}
-						fprintf(fout, " ) %c ( ", current->operation);
-						for (int i = 0; i < current->size; i++){
-							if (i == current->size - 1){
-								fprintf(fout, "%lf", current->y[i]);
-							}
-							else fprintf(fout, "%lf ", current->y[i]);
-						}
-						if (current->operation == '+' || current->operation == '-'){
-							fprintf(fout, " ) = ( ");
-							for (int i = 0; i < res_current->size; i++){
-								if (i == res_current->size - 1){
-									fprintf(fout, "%lf", res_current->res[i]);
-								}
-								else fprintf(fout, "%lf ", res_current->res[i]);
-							}
-							fprintf(fout, " )\n");
-						}
-						else{
-							fprintf(fout, " ) = %lf\n", *res_current->res);
-						}
-						break;
-					case 'n':
-						switch (current->operation){
-							case '+':
-								fprintf(fout, "%lf + %lf = %lf\n", *current->x, *current->y, *res_current->res);
-								break;
-							case '-':
-								fprintf(fout, "%lf - %lf = %lf\n", *current->x, *current->y, *res_current->res);
-								break;
-							case '*':
-								fprintf(fout, "%lf * %lf = %lf\n", *current->x, *current->y, *res_current->res);
-								break;
-							case '/':
-								fprintf(fout, "%lf / %lf = %lf\n", *current->x, *current->y, *res_current->res);
-								break;
-							case '!':
-								fprintf(fout, "%lf! = %lf\n", *current->x, *res_current->res);
-								break;
-							case '^':
-								fprintf(fout, "%lf^%lf = %lf\n", *current->x, *current->y, *res_current->res);
-								break;
-						}
-				}
-			current = nextElement(current);
-			res_current = nextResult(res_current);
+						fprintf(fout, " )\n");
+					}
+					else{
+						fprintf(fout, " ) = %lf\n", *var->result);
+					}
+					break;
+				case 'n':
+					switch (var->operation) {
+						case '+':
+							fprintf(fout, "%lf + %lf = %lf\n", *var->x, *var->y, *var->result);
+							break;
+						case '-':
+							fprintf(fout, "%lf - %lf = %lf\n", *var->x, *var->y, *var->result);
+							break;
+						case '*':
+							fprintf(fout, "%lf * %lf = %lf\n", *var->x, *var->y, *var->result);
+							break;
+						case '/':
+							fprintf(fout, "%lf / %lf = %lf\n", *var->x, *var->y, *var->result);
+							break;
+						case '!':
+							fprintf(fout, "%lf! = %lf\n", *var->x, *var->result);
+							break;
+						case '^':
+							fprintf(fout, "%lf^%lf = %lf\n", *var->x, *var->y, *var->result);
+							break;
+					}
+			}
 		}
 		fclose(fout);
-		while (head != NULL){
-			deleteElement(&head);
-		}
-		while (res_head != NULL){
-			deleteResult(&res_head);
-		}
 		puts("Continue working? y - yes, n - no");
-		scanf(" %c", &b);
-	}
-	while(b!='n');
+			scanf(" %c", &b);
+	}while(b!='n');
 	return 0;
 }
