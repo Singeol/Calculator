@@ -53,50 +53,7 @@ void init_queue(queue *q) {
 /* Функция для добавления элемента в очередь
  * Fucntion for add element of queue
  */
-void enqueueIn(queue *q) {
-
-	//create a new node
-	node * tmp = malloc(sizeof(node));
-	fscanf(fin," %c %c", &tmp->operation, &tmp->mode);
-	switch (tmp->mode){
-		case 'n':
-			tmp->size = 1;
-			if (tmp->operation == '!'){
-				tmp->x = malloc(1 * sizeof(double));
-				for (int i = 0; i < tmp->size; i++) fscanf(fin, "%lf", &tmp->x[i]);
-	            tmp->y = NULL;
-	        }
-	        else{
-	        	tmp->x = malloc(1 * sizeof(double));
-	            tmp->y = malloc(1 * sizeof(double));
-	            for (int i = 0; i < tmp->size; i++) fscanf(fin, "%lf", &tmp->x[i]);
-	            for (int i = 0; i < tmp->size; i++) fscanf(fin, "%lf", &tmp->y[i]);
-	        }
-	        break;
-	    case 'v':
-	    	fscanf(fin, "%i", &tmp->size);
-	    	tmp->x = malloc(tmp->size*sizeof(double));
-	        tmp->y = malloc(tmp->size*sizeof(double));
-	        for (int i = 0; i < tmp->size; i++) fscanf(fin, "%lf", &tmp->x[i]);
-	        for (int i = 0; i < tmp->size; i++) fscanf(fin, "%lf", &tmp->y[i]);
-	        break;
-	    }
-
-	if (q->tail != NULL) {
-		q->tail->next = tmp;
-	}
-
-	q->tail = tmp;
-
-	if(q->head == NULL) {
-		q->head = tmp;
-	}
-}
-
-/* Функция для добавления элемента в очередь
- * Fucntion for add element of queue
- */
-void enqueueOut(queue *q, data *value) {
+void enqueue(queue *q, data *value) {
 
 	node * tmp = malloc(sizeof(node));
 	tmp->operation = value->operation;
@@ -279,9 +236,35 @@ int main() {
 		puts("Enter filename to output");
 		scanf("%s", output);
 		fin = fopen(input, "r");
+		var = malloc(sizeof(data));
 		while (feof(fin) == 0) {
-			enqueueIn(&q1);
+			fscanf(fin," %c %c", &var->operation, &var->mode);
+			switch (var->mode){
+				case 'n':
+					var->size = 1;
+					if (var->operation == '!'){
+						var->x = malloc(1 * sizeof(double));
+						for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->x[i]);
+				        var->y = NULL;
+				    }
+				    else{
+				      	var->x = malloc(1 * sizeof(double));
+				        var->y = malloc(1 * sizeof(double));
+				        for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->x[i]);
+				        for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->y[i]);
+				    }
+				    break;
+				case 'v':
+				   	fscanf(fin, "%i", &var->size);
+				   	var->x = malloc(var->size*sizeof(double));
+				    var->y = malloc(var->size*sizeof(double));
+				    for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->x[i]);
+				    for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->y[i]);
+				    break;
+			}
+			enqueue(&q1, var);
 		}
+		free(var);
 		fclose(fin);
 		while ((var = dequeue(&q1)) != NULL) {
 			switch (var->mode) {
@@ -289,15 +272,15 @@ int main() {
 					switch (var->operation) {
 						case '+':
 							var->result = doSumVector(var->x, var->y, var->size);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 						case '-':
 							var->result = doSubstractionVector(var->x, var->y, var->size);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 						case '*':
 							var->result = doMultiplyVector(var->x, var->y, var->size);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 					}
 					break;
@@ -305,27 +288,27 @@ int main() {
 					switch (var->operation) {
 						case '+':
 							var->result = doSum(*var->x, *var->y);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 						case '-':
 							var->result = doSubstraction(*var->x, *var->y);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 						case '*':
 							var->result = doMultiply(*var->x, *var->y);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 						case '/':
 							var->result = doDivision(*var->x, *var->y);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 						case '!':
 							var->result = doFactorial(*var->x);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 						case '^':
 							var->result = doPow(*var->x, *var->y);
-							enqueueOut(&q2, var);
+							enqueue(&q2, var);
 							break;
 					}
 					break;
