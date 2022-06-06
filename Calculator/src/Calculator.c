@@ -11,117 +11,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Структура для хранения данных
- * Structure for store the data
-*/
-typedef struct data {
-	char mode, operation;
-	int size;
-	double *x, *y;
-	double *result;
-} data;
+FILE *fin, *fout;
 
-/* Структура для описания элемента списка
- * Structure for declare element of list
+
+/* Структура для описания элемента стека
+ * Structure for declare element of queue
  */
 typedef struct node {
-	char mode, operation;
-	int size;
-	double *x, *y;
-	double *result;
+	double x;
 	struct node *next;
 } node;
 
-/* Структура для описания списка
- * Structure for describing the list
+/* Структура для описания стека
+ * Structure for describing the stack
  */
-typedef struct {
+typedef struct stack {
 	node *head;
-	node *current;
-} list;
+} stack;
 
-/* Функция для инициализации списка
- * Function to initialize the list
+/* Функция для инициализирования стека
+ * Function to initialize the stack
  */
-void init_list(list *l) {
-	l->head = NULL;
-	l->current = NULL;
+void init_stack(stack *s) {
+	s->head = NULL;
 }
-FILE *fin, *fout; //Declare variables for work with files
 
-/* Функция для добавления входных данных в конец списка
- * Function for add input data to end of list
+/* Функция для добавления элемента в стек
+ * Fucntion for add element of stack
  */
-void pushElement(list *l, data *value) {
+void push(stack *s, double number) {
 
-	node* tmp = malloc(sizeof(node));
-	node *last = l->head;
-	tmp->operation = value->operation;
-	tmp->mode = value->mode;
-	tmp->result = value->result;
-	tmp->x = value->x;
-	tmp->y = value->y;
-	tmp->size = value->size;
-	tmp->next = NULL;
-	if(l->head == NULL){
-		l->head = tmp;
-		return;
-	}
+	node * tmp = malloc(sizeof(node));
 
-	while (last->next != NULL){
-		last = last->next;
-	}
-	last->next = tmp;
-	return;
+	tmp->x = number;
+
+	tmp->next = s->head;
+
+	s->head = tmp;
+
 }
 
-// Удаляет первый элемент исходного списка
-void deleteElement(list *l) {
-  node *tmp;
-
-  if(&l->head == NULL) return;
-
-  tmp = l->head;
-
-  l->head = l->head->next;
-
-  free(tmp);
-}
-
-/* Функция для перемещения вперёд по списку
- * Function for move forward through list
+/* Функция для изъятия данных из стека
+ * Function to pop element from stack
  */
-node* nextElement(list *l){
-	l->current = l->current->next;
-	return l->current;
-}
+double pop(stack *s) {
+	node *tmp;
+	tmp = malloc(sizeof(node));
+	tmp = s->head;
 
-/* Функция для сложения векторов
- * Function for adding vectors*/
-double* doSumVector(double *x, double *y, int size){
-	double *result;
-	result = malloc(size*sizeof(double));
-	for (int i = 0; i < size; i++) result[i] =  x[i] + y[i];
-	return result;
-}
+	s->head = s->head->next;
 
-/* Функция для разности векторов
- * Function for the difference of vectors*/
-double* doSubstractionVector(double *x, double *y, int size){
-	double *result;
-	result = malloc(size*sizeof(double));
-	for (int i = 0; i < size; i++) result[i] =  x[i] - y[i];
-	return result;
-}
-
-/* Функция для умножения векторов
- * Function for multiplying vectors*/
-double* doMultiplyVector(double *x, double *y, int size){
-	double *result;
-	result = malloc(sizeof(double));
-	*result = 0;
-	for (int i = 0; i < size; i++) *result +=  x[i] * y[i];
-	return result;
+	return tmp->x;
 }
 
 /* Функция для нахождения модуля числа
@@ -210,178 +150,58 @@ double* doPow(int x, int y){
 	return result;
 }
 
-
-/* Основная функция, точка входа
- * Main function, entry point*/
-int main(int argc, char* argv[]){
+int main(void) {
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
-	data *var;
-	list l1, l2;
-	char input[259], output[259]; // Переменные для хранения имени файлов
-	char b; // Переменная продолжения работа
-	do{
-		init_list(&l1);
-		init_list(&l2);
+	char input[259], output[259], in[256], b, operation;
+	double nm;
+	stack s1;
+	do {
+		init_stack(&s1);
 		puts("Enter filename to input");
 		scanf("%s", input);
 		puts("Enter filename to output");
 		scanf("%s", output);
 		fin = fopen(input, "r");
-		var = malloc(sizeof(data));
-		while (feof(fin) == 0) {
-			fscanf(fin," %c %c", &var->operation, &var->mode);
-			switch (var->mode){
-				case 'n':
-					var->size = 1;
-					if (var->operation == '!'){
-						var->x = malloc(1 * sizeof(double));
-						for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->x[i]);
-						var->y = NULL;
-					}
-					else{
-					   	var->x = malloc(1 * sizeof(double));
-					    var->y = malloc(1 * sizeof(double));
-					    for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->x[i]);
-					    for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->y[i]);
-					}
-					break;
-				case 'v':
-				   	fscanf(fin, "%i", &var->size);
-				   	var->x = malloc(var->size*sizeof(double));
-				    var->y = malloc(var->size*sizeof(double));
-				    for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->x[i]);
-				    for (int i = 0; i < var->size; i++) fscanf(fin, "%lf", &var->y[i]);
-				    break;
-			}
-			pushElement(&l1, var);
-		}
-		fclose(fin);
-		l1.current = l1.head;
-		while (l1.current != NULL){
-			var->mode = l1.current->mode;
-			var->operation = l1.current->operation;
-			var->size = l1.current->size;
-			var->x = l1.current->x;
-			var->y = l1.current->y;
-			switch (var->mode){
-				case 'v':
-					switch (var->operation){
-						case '+':
-							var->result = doSumVector(var->x, var->y, var->size);
-							pushElement(&l2, var);
-							break;
-						case '-':
-							var->result = doSubstractionVector(var->x, var->y, var->size);
-							pushElement(&l2, var);
-							break;
-						case '*':
-							var->result = doMultiplyVector(var->x, var->y, var->size);
-							pushElement(&l2, var);
-							break;
-					}
-					break;
-					case 'n':
-						switch (l1.current->operation){
-							case '+':
-								var->result = doSum(*var->x, *var->y);
-								pushElement(&l2, var);
-								break;
-							case '-':
-								var->result = doSubstraction(*var->x, *var->y);
-								pushElement(&l2, var);
-								break;
-							case '*':
-								var->result = doMultiply(*var->x, *var->y);
-								pushElement(&l2, var);
-								break;
-							case '/':
-								var->result = doDivision(*var->x, *var->y);
-								pushElement(&l2, var);
-								break;
-							case '!':
-								var->result = doFactorial(*var->x);
-								pushElement(&l2, var);
-								break;
-							case '^':
-								var->result = doPow(*var->x, *var->y);
-								pushElement(&l2, var);
-								break;
-						}
-						break;
-				}
-			nextElement(&l1);
-		}
-		free(var);
-		l1.current = l1.head;
-		l2.current = l2.head;
-		if ((fout = fopen(output, "a")) == NULL){
+		if ((fout = fopen(output, "a")) == NULL) {
 			fout = fopen(output, "w");
 		}
-		while (l2.current != NULL){
-				switch (l2.current->mode){
-					case 'v':
-						fprintf(fout, "( ");
-						for (int i = 0; i < l2.current->size; i++){
-							if (i == l2.current->size - 1){
-								fprintf(fout, "%lf", l2.current->x[i]);
-							}
-							else fprintf(fout, "%lf ", l2.current->x[i]);
-						}
-						fprintf(fout, " ) %c ( ", l2.current->operation);
-						for (int i = 0; i < l2.current->size; i++){
-							if (i == l2.current->size - 1){
-								fprintf(fout, "%lf", l2.current->y[i]);
-							}
-							else fprintf(fout, "%lf ", l2.current->y[i]);
-						}
-						if (l2.current->operation == '+' || l2.current->operation == '-'){
-							fprintf(fout, " ) = ( ");
-							for (int i = 0; i < l2.current->size; i++){
-								if (i == l2.current->size - 1){
-									fprintf(fout, "%lf", l2.current->result[i]);
-								}
-								else fprintf(fout, "%lf ", l2.current->result[i]);
-							}
-							fprintf(fout, " )\n");
-						}
-						else{
-							fprintf(fout, " ) = %lf\n", *l2.current->result);
-						}
-						break;
-					case 'n':
-						switch (l2.current->operation){
-							case '+':
-								fprintf(fout, "%lf + %lf = %lf\n", *l2.current->x, *l2.current->y, *l2.current->result);
-								break;
-							case '-':
-								fprintf(fout, "%lf - %lf = %lf\n", *l2.current->x, *l2.current->y, *l2.current->result);
-								break;
-							case '*':
-								fprintf(fout, "%lf * %lf = %lf\n", *l2.current->x, *l2.current->y, *l2.current->result);
-								break;
-							case '/':
-								fprintf(fout, "%lf / %lf = %lf\n", *l2.current->x, *l2.current->y, *l2.current->result);
-								break;
-							case '!':
-								fprintf(fout, "%lf! = %lf\n", *l2.current->x, *l2.current->result);
-								break;
-							case '^':
-								fprintf(fout, "%lf^%lf = %lf\n", *l2.current->x, *l2.current->y, *l2.current->result);
-								break;
-						}
+		while (feof(fin) == 0) {
+			fscanf(fin, "%s", in);
+				if (atof(in) == 0) {
+					operation = in[0];
+					switch (operation) {
+						case '+':
+							push(&s1, *doSum(pop(&s1), pop(&s1)));
+							break;
+						case '-':
+							push(&s1, *doSubstraction(pop(&s1), pop(&s1)));
+							break;
+						case '*':
+							push(&s1, *doMultiply(pop(&s1), pop(&s1)));
+							break;
+						case '/':
+							push(&s1, *doDivision(pop(&s1), pop(&s1)));
+							break;
+						case '!':
+							push(&s1, *doFactorial(pop(&s1)));
+							break;
+						case '^':
+							push(&s1, *doPow(pop(&s1), pop(&s1)));
+							break;
+						case '=':
+							fprintf(fout, "%lf\n", pop(&s1));
+							break;
+					}
 				}
-			nextElement(&l2);
+				else {
+					nm = atof(in);
+					push(&s1, nm);
+				}
 		}
+		fclose(fin);
 		fclose(fout);
-		while (l1.head != NULL){
-			deleteElement(&l1);
-		}
-		while (l2.head != NULL){
-			deleteElement(&l2);
-		}
 		puts("Continue working? y - yes, n - no");
 		scanf(" %c", &b);
-	} while(b!='n');
-	return 0;
+	}while(b != 'n');
 }
