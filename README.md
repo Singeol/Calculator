@@ -1,20 +1,14 @@
-Calculator C Project with 11 basic functions and 3 vector functions.\
-This project is designed to practice the skills of using the C language.\
-The C programming language is used, the MinGW-W64 compiler gcc 11.2.0.\
-To run, clone the repository and import into Eclipse, or by the src path. Build and run the Calculator.c file\
-Welcome to calculator!
-Here are the main operations supported by the normal mode:
-1. '+'    	(Adds up the input numbers)
-2. '-'   	  (Subtracts the second number from the first)
-3. '*'    	(Multiplies the first number by the second)
-4. '/'    	(Divides the first number by the second)
-5. '!'    	(Finds the factorial of a number)
-6. 'pow'    (Raises a number to the power of another number, works only with integers)
-7. 'ln'		  (Finds the natural logarithm of a number)
-8. 'sqrt'	  (Finds the square root of a number)
-9. 'cbrt'	  (Finds the cubic root of a number)
-10. 'abs'	  (Finds the number module)
-11. 'exp'	  (Finds the exponent in the power of a number)
-1. '+'		(Adds vectors)
-2. '-'		(Subtracts the second vector from the first)
-3. '*'		(Calculates the scalar product of vectors)
+#Calculator
+Проект калькулятора на языке программирования C.  
+Проект для знакомства с базовым синтаксисом языка C, ознакомления сос тандартными структурами данных (список, очередь, стек).  
+При разработке использовался компилятор gcc 11.2.0 MinGW-W64 и IDE Eclipse.  
+Чтобы запустить проект, нужно склонировать репозиторий или импортировать в Eclipse и запустить.  
+Калькулятор поддерживает работу с вещественными числами.  
+Калькулятор имеет несколько режимов и несколько базовый операций:  
+v - режим работы с векторами, n - режим работы с числами.  
+1. '+' сумма двух чисел или сумма векторов, заданного размера  
+2. '-' разность двух чисел или разность векторов, заданного размера  
+3. '\*' произведение двух чисел или скалярное произведение векторов, заданного размера  
+4.  '/' частное двух чисел  
+5.  '!' факториал введённого числа
+6.  '^' возведение числа в степень, работает только с натуральными числами.
